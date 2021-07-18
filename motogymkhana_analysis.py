@@ -127,7 +127,7 @@ else:
 df_class = df_class[df_class['Machine']==option_machine]
 
 fig = px.scatter(
-    data_frame = df_class,
+    data_frame = df_class.sort_values('Class'),
     x = 'Date',
     y = 'Rating[%]',
     color = 'Class',
@@ -165,7 +165,7 @@ slider_range2 = st.slider(
     )
 
 fig = px.histogram(
-    data_frame = df_class[(df_class['Season']>=slider_range2[0]) & (df_class['Season']<=slider_range2[1])],
+    data_frame = df_class[(df_class['Season']>=slider_range2[0]) & (df_class['Season']<=slider_range2[1])].sort_values('Class'),
     x = 'Rating[%]',
     color = 'Class',
     range_x = [100, 160],
