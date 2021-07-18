@@ -37,7 +37,19 @@ df_season
 
 
 st.title('シーズン・車両別出走台数')
-df_m = df.groupby(['Season', 'Machine', 'Manufacturer'], as_index=False).count()
+ex_dup = st.checkbox('シーズン中の同一ライダーの重複を除く')
+
+if ex_dup == True:
+    temp = pd.DataFrame()
+    for year in df['Season'].unique():
+        df_year = df[df['Season']==year].sort_values('Class')
+        all_machine = df_year.drop_duplicates(subset=['Rider', 'Machine'])
+        temp = pd.concat([temp, all_machine])
+    df_m = temp
+else:
+    df_m = df
+
+df_m = df_m.groupby(['Season', 'Machine', 'Manufacturer'], as_index=False).count()
 
 option_season = st.slider(
     'シーズンを選択',
@@ -59,6 +71,8 @@ if option_man2 != '全メーカー':
     df_m = df_m[df_m['Manufacturer']==option_man2]
 
 df_m = df_m[df_m['Season'] == option_season]
+
+
 
 fig = px.bar(
     data_frame = df_m.sort_values(['Rider']),
