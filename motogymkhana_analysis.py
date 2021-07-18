@@ -3,6 +3,7 @@ import datetime
 import plotly.express as px
 import pandas as pd
 import streamlit as st
+from streamlit.logger import DEFAULT_LOG_MESSAGE
 
 df = pd.read_csv('data.csv', index_col=0)
 df = df.replace({'NN':'N', 'NO':'N', 'NX':'N'})
@@ -33,6 +34,39 @@ st.plotly_chart(fig)
 
 df_season = pd.crosstab(df.Season, df.Manufacturer, margins=True).sort_values(by='All', axis=1, ascending=False).iloc[:-1, 1:]
 df_season
+
+
+st.title('シーズン・車両別出走台数')
+df_m = df.groupby(['Season', 'Machine', 'Manufacturer'], as_index=False).count()
+
+option_season = st.slider(
+    'シーズンを選択',
+    value = 2021,
+    min_value = 2011,
+    max_value = 2021,
+    step = 1
+)
+    
+m_list2 = ['全メーカー'] + list_man.tolist()
+#m_list2.append((np.sort(list_man).tolist()))
+
+option_man2 = st.selectbox(
+    '抽出対象メーカーを選択',
+    m_list2
+)
+
+if option_man2 != '全メーカー':
+    df_m = df_m[df_m['Manufacturer']==option_man2]
+
+df_m = df_m[df_m['Season'] == option_season]
+
+fig = px.bar(
+    data_frame = df_m.sort_values(['Rider']),
+    x = 'Rider',
+    y = 'Machine',
+)
+
+st.plotly_chart(fig)
 
 
 
