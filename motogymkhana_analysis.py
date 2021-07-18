@@ -37,7 +37,7 @@ df_season
 
 
 st.title('シーズン・車両別出走台数')
-ex_dup = st.checkbox('シーズン中の同一ライダーの重複を除く')
+ex_dup = st.checkbox('シーズン中の同一ライダーの重複を除く:')
 
 if ex_dup == True:
     temp = pd.DataFrame()
