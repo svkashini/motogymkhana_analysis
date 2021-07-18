@@ -7,6 +7,8 @@ from streamlit.logger import DEFAULT_LOG_MESSAGE
 
 df = pd.read_csv('data.csv', index_col=0)
 df = df.replace({'NN':'N', 'NO':'N', 'NX':'N'})
+df['Season'] = df['Date'].apply(lambda x: int(x[:4]))
+
 color_class = {'A':'red', 'B':'blue', 'C1':'lightgreen', 'C2':'limegreen', 'N':'yellow', 'NL':'pink'}
 color_man = {'Honda':'red', 'Suzuki':'yellow', 'Kawasaki':'limegreen', 'Yamaha':'blue', 'KTM':'orange', 'Ducati':'crimson'}
 list_man = df['Manufacturer'].unique()
