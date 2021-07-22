@@ -12,14 +12,14 @@ st.text('データは出典元HP記載のリザルトを加工し作成')
 
 add_selectbox = st.sidebar.selectbox(
     '参照データを選択',
-    ('関東: DUNROP杯, JAGE杯 (2011〜)', '中部: KRiSP（2017〜）')
+    ('関東: DUNLOP杯, JAGE杯 (2011〜)', '中部: KRiSP（2017〜）')
 )
 
 add_checkbox = st.sidebar.checkbox(
     'シーズン中の同一ライダーの重複を除く'
 )
 
-if add_selectbox == '関東: DUNROP杯, JAGE杯 (2011〜)':
+if add_selectbox == '関東: DUNLOP杯, JAGE杯 (2011〜)':
     #関東データに適用
     df = pd.read_csv('data.csv', index_col=0)
     df = df.replace({'NN':'N', 'NO':'N', 'NX':'N'})
@@ -234,7 +234,7 @@ st.plotly_chart(fig)
 
 
 
-if add_selectbox == '関東: DUNROP杯, JAGE杯 (2011〜)':
+if add_selectbox == '関東: DUNLOP杯, JAGE杯 (2011〜)':
     st.title('クラス昇格者の使用車両')
     classup_list = ['Bへ昇格', 'C1へ昇格', 'C2へ昇格']
     option_classup = st.selectbox('選択して下さい', classup_list)
