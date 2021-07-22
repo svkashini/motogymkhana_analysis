@@ -189,8 +189,12 @@ else:
 if option_man != '全メーカー':
     if option_machine == '全車種':
         df_class = df_class[df_class['Manufacturer']==option_man]
+        graph_title = add_selectbox + ', ' + option_man
     else:
         df_class = df_class[df_class['Machine']==option_machine]
+        graph_title = add_selectbox + ', ' + option_man + ', ' + option_machine
+else:
+    graph_title = add_selectbox + ', ' + option_man
 
 fig = px.scatter(
     data_frame = df_class.sort_values('Class'),
@@ -200,7 +204,8 @@ fig = px.scatter(
     color_discrete_map = color_class,
     range_x = [datetime.datetime(year_min.item()+1,1,1), datetime.datetime(year_max.item(),1,1)],
     range_y = [160, 100],
-    labels = {'Rating[%]':'タイム比[%]'}
+    labels = {'Rating[%]':'タイム比[%]'},
+    title = graph_title
 )
 st.plotly_chart(fig)
 
@@ -222,6 +227,7 @@ fig = px.histogram(
     range_x = [100, 160],
     barmode = 'stack',
     color_discrete_map = color_class,
+    title = graph_title + '(' + str(slider_range2[0]) + '〜' + str(slider_range2[1]) +')'
 )
 
 st.plotly_chart(fig)
