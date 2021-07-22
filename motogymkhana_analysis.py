@@ -136,10 +136,13 @@ else:
     machine_list = df[df['Manufacturer']==option_man]['Machine'].unique()
     option_machine = st.sidebar.selectbox(
         '車両を選択',
-        np.sort(machine_list),
+        ['全車種'] + np.sort(machine_list).tolist(),
     )
-
-    df_machine = df[df['Machine']==option_machine]
+if option_man != '全メーカー':
+    if option_machine != '全車種':
+        df_machine = df[df['Machine']==option_machine]
+    else:
+        df_machine = df[df['Manufacturer']==option_man]
 
 if add_checkbox == True:
     temp = pd.DataFrame()
@@ -184,7 +187,10 @@ else:
     df_class = df[df['Class']==option_class]
 
 if option_man != '全メーカー':
-    df_class = df_class[df_class['Machine']==option_machine]
+    if option_machine == '全車種':
+        df_class = df_class[df_class['Manufacturer']==option_man]
+    else:
+        df_class = df_class[df_class['Machine']==option_machine]
 
 fig = px.scatter(
     data_frame = df_class.sort_values('Class'),
