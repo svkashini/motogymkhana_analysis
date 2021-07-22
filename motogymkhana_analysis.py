@@ -121,7 +121,7 @@ fig = px.bar(
 )
 st.plotly_chart(fig)
 
-show_detail = st.checkbox('全データを見る')
+show_detail = st.checkbox('16位以降を含めた全データの表を表示')
 if show_detail == True:
     temp = df_m[['Manufacturer', 'Machine', 'Rider']].sort_values('Rider', ascending=False)
     temp
@@ -172,6 +172,9 @@ fig = px.bar(
 )
 st.plotly_chart(fig)
 
+
+
+
 st.header('タイム比推移・分布')
 class_list = ['全て'] + np.sort(df['Class'].unique()).tolist()
 option_class = st.selectbox('クラスを選択', class_list)
@@ -194,6 +197,9 @@ fig = px.scatter(
     labels = {'Rating[%]':'タイム比[%]'}
 )
 st.plotly_chart(fig)
+
+
+
 
 slider_range2 = st.slider(
     '期間を選択',
