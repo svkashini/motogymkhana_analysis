@@ -117,11 +117,14 @@ fig = px.bar(
     x = 'Rider',
     y = 'Machine',
     range_y = [disp_min, disp_max],
-    title = str(add_slider) + '年の出走台数上位15車種 (' + str(option_man) + ')'
+    title = add_selectbox[:2] + ': '+ str(add_slider) + '年の出走台数上位15車種 (' + str(option_man) + ')'
 )
-
 st.plotly_chart(fig)
 
+show_detail = st.checkbox('全データを見る')
+if show_detail == True:
+    temp = df_m[['Manufacturer', 'Machine', 'Rider']].sort_values('Rider', ascending=False)
+    temp
 
 #車両別データの表示
 st.title('【車両別データ】')
@@ -170,7 +173,7 @@ fig = px.bar(
 st.plotly_chart(fig)
 
 st.header('タイム比推移・分布')
-class_list = ['全て', 'A', 'B', 'C1', 'C2', 'N', 'NL']
+class_list = ['全て'] + np.sort(df['Class'].unique()).tolist()
 option_class = st.selectbox('クラスを選択', class_list)
 if option_class == '全て':
     df_class = df
@@ -186,7 +189,7 @@ fig = px.scatter(
     y = 'Rating[%]',
     color = 'Class',
     color_discrete_map = color_class,
-    range_x = [datetime.datetime(year_min.item(),1,1), datetime.datetime(year_max.item(),1,1)],
+    range_x = [datetime.datetime(year_min.item()+1,1,1), datetime.datetime(year_max.item(),1,1)],
     range_y = [160, 100],
     labels = {'Rating[%]':'タイム比[%]'}
 )
@@ -194,9 +197,9 @@ st.plotly_chart(fig)
 
 slider_range2 = st.slider(
     '期間を選択',
-    value = [year_min.item(), year_max.item()],
-    min_value = year_min.item(),
-    max_value = year_max.item(),
+    value = [year_min.item()+1, year_max.item()-1],
+    min_value = year_min.item()+1,
+    max_value = year_max.item()-1,
     step = 1
     )
 
