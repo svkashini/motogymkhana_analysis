@@ -71,26 +71,6 @@ option_man = st.sidebar.selectbox(
 )
 
 st.title('【シーズン別出走車両台数推移】')
-st.text('注記）のべエントリー数で集計')
-
-df_entry = df.groupby(['Season', 'Manufacturer'], as_index=False).count()
-df_entry = df_entry[['Season','Manufacturer', 'Rider']]
-
-fig = px.bar(
-    data_frame = df_entry.sort_values('Rider', ascending=False),
-    x = 'Season',
-    y = 'Rider',
-    color = 'Manufacturer',
-    color_discrete_map = color_man,
-    labels = {'Rider':'のべ出走台数（台）'},
-)
-st.plotly_chart(fig)
-
-df_season = pd.crosstab(df.Season, df.Manufacturer, margins=True).sort_values(by='All', axis=1, ascending=False).iloc[:-1, 1:]
-df_season
-
-
-st.title('シーズン・車両別出走台数')
 
 if add_checkbox == True:
     temp = pd.DataFrame()
@@ -101,6 +81,30 @@ if add_checkbox == True:
     df_m = temp
 else:
     df_m = df
+
+df_entry = df_m.groupby(['Season', 'Manufacturer'], as_index=False).count()
+df_entry = df_entry[['Season','Manufacturer', 'Rider']]
+
+graph_title = add_selectbox + '  出走台数推移'
+if add_checkbox == True:
+    graph_title += ('(同一ライダーの重複除く)')
+
+fig = px.bar(
+    data_frame = df_entry.sort_values('Rider', ascending=False),
+    x = 'Season',
+    y = 'Rider',
+    color = 'Manufacturer',
+    color_discrete_map = color_man,
+    labels = {'Rider':'出走台数（台）'},
+    title = graph_title
+)
+st.plotly_chart(fig)
+
+df_season = pd.crosstab(df.Season, df.Manufacturer, margins=True).sort_values(by='All', axis=1, ascending=False).iloc[:-1, 1:]
+df_season
+
+
+st.title('シーズン・車両別出走台数')
 
 df_m = df_m.groupby(['Season', 'Machine', 'Manufacturer'], as_index=False).count()
 
